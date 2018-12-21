@@ -25,7 +25,6 @@ public class Application {
 		//@formatter:off
         logger.info("\n----------------------------------------------------------\n\t"
         		+ "Application '{}' is running!\n\t"
-        		+ "Environment: \t{}\n\t"
         		+ "Local      : \thttp://127.0.0.1:{}\n\t"
         		+ "External   : \thttp://{}:{}\n\t"
         		+ "Locale     : \t{}\n\t"
