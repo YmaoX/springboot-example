@@ -1,6 +1,7 @@
 package com.maomao.boottest.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -12,6 +13,8 @@ public class UserDTO {
 	private String name;
 
 	private LocalDate birthDay;
+
+	private List<AnswerDTO> answers;
 
 	public String getIdentifier() {
 		return identifier;
@@ -37,4 +40,11 @@ public class UserDTO {
 		this.birthDay = birthDay;
 	}
 
+	public List<AnswerDTO> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(final List<AnswerDTO> answers) {
+		this.answers = answers;
+	}
 }

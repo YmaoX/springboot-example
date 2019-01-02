@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.maomao.boottest.dto.AnswerDTO;
 import com.maomao.boottest.dto.QuestionDTO;
+import com.maomao.boottest.entity.Answer;
 import com.maomao.boottest.entity.Question;
 import com.maomao.boottest.repository.QuestionRepo;
 
@@ -18,6 +19,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Autowired
 	private QuestionRepo questionRepo;
 
+	@Autowired
 	private AnswerService answerService;
 
 	@Override
@@ -32,7 +34,10 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public QuestionDTO getQuestionByTitle(final String title) {
 		final Question found = questionRepo.findQuestionByTitle(title);
-		return toDTO(found);
+		final QuestionDTO rtn = toDTO(found);
+		//one to many, lazy fetch answers
+		fillAnswers(rtn, found.getAnswers());
+		return rtn;
 	}
 
 	//question contains all answer
@@ -44,11 +49,14 @@ public class QuestionServiceImpl implements QuestionService {
 		final QuestionDTO dto = new QuestionDTO();
 		dto.setTitle(question.getTitle());
 		dto.setContent(question.getContent());
-		if (question.getAnswers() != null) {
-			final List<AnswerDTO> answers = question.getAnswers().stream().map(answerService::toDTO).collect(toList());
-			dto.setAnswers(answers);
-		}
 		return dto;
+	}
+
+	private void fillAnswers(final QuestionDTO dto, final List<Answer> answers) {
+		if (answers != null) {
+			final List<AnswerDTO> answerDTOs = answers.stream().map(answerService::toDTO).collect(toList());
+			dto.setAnswers(answerDTOs);
+		}
 	}
 
 }

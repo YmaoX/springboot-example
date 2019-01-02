@@ -3,10 +3,13 @@ package com.maomao.boottest.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maomao.boottest.dto.AnswerDTO;
+import com.maomao.boottest.dto.UserDTO;
 import com.maomao.boottest.entity.Answer;
 import com.maomao.boottest.entity.Question;
 import com.maomao.boottest.entity.User;
@@ -33,10 +36,8 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Override
 	public AnswerDTO createAnswer(final String questionTitle, final String content, final String userId) {
-		final Question question = questionRepo.findQuestionByTitle(questionTitle);
-		if (question == null) {
-			throw new BasicException(ErrorCodes.QUESTION_NOT_FOUND, ErrorCodes.QUESTION_NOT_FOUND_MSG, questionTitle);
-		}
+		final Question question = checkQuestionExist(questionTitle);
+
 		final User user = userRepo.findUserByIdentifier(userId);
 		if (user == null) {
 			throw new BasicException(ErrorCodes.USER_NOT_FOUND, ErrorCodes.USER_NOT_FOUND_MSG, userId);
@@ -50,6 +51,31 @@ public class AnswerServiceImpl implements AnswerService {
 
 		final Answer saved = answerRepo.save(answer);
 		return toDTO(saved);
+	}
+
+	@Override
+	@Transactional
+	public AnswerDTO createAnswerWithUser(final String questionTitle, final String content, final UserDTO user) {
+		final Question question = checkQuestionExist(questionTitle);
+		//create user
+		final User savedUser = userService.createRepoUser(user.getIdentifier(), user.getName(), user.getBirthDay());
+
+		final Answer answer = new Answer();
+		answer.setContent(content);
+		answer.setQuestion(question);
+		answer.setUser(savedUser);
+		answer.setCreationTimestamp(new Date());
+
+		final Answer saved = answerRepo.save(answer);
+		return toDTO(saved);
+	}
+
+	private Question checkQuestionExist(final String questionTitle) {
+		final Question question = questionRepo.findQuestionByTitle(questionTitle);
+		if (question == null) {
+			throw new BasicException(ErrorCodes.QUESTION_NOT_FOUND, ErrorCodes.QUESTION_NOT_FOUND_MSG, questionTitle);
+		}
+		return question;
 	}
 
 	@Override

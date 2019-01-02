@@ -23,10 +23,23 @@ public class ControllerExceptionHandler {
 
 	@ExceptionHandler(BasicException.class)
 	public ResponseEntity<ErrorDTO> handle(final BasicException be) {
-		final String s = messageSource.getMessage(be.getMessageKey(), be.getParams(), Locale.ENGLISH);
-		logger.error(s, be);
-		final ErrorDTO dto = new ErrorDTO(be.getCode(), s);
-		return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+		try {
+			final String s = messageSource.getMessage(be.getMessageKey(), be.getParams(), Locale.ENGLISH);
+			logger.error(s, be);
+			final ErrorDTO dto = new ErrorDTO(be.getCode(), s);
+			return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+		} catch (final Exception e) {
+			logger.error("error when handling exception", e);
+			logger.error("original exception", be);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@SuppressWarnings("static-method")
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ErrorDTO> handle(final RuntimeException be) {
+		logger.error("", be);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 }

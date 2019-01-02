@@ -25,4 +25,9 @@ public class BasicException extends RuntimeException {
 		return params;
 	}
 
+	@Override
+	public String toString() {
+		return "code: " + getCode() + ", message key: " + getMessageKey();
+	}
+
 }

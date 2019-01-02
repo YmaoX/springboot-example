@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,5 +42,11 @@ public class UserController {
 	public AnswerDTO postAnswer(@PathVariable final String id, @RequestParam final String questionTitle,
 			@RequestParam final String content) {
 		return answerService.createAnswer(questionTitle, content, id);
+	}
+
+	@RequestMapping(value = "/answer-with-user", method = RequestMethod.POST)
+	public AnswerDTO postAnswerForNewUser(@RequestParam final String questionTitle, @RequestParam final String content,
+			@RequestBody final UserDTO user) {
+		return answerService.createAnswerWithUser(questionTitle, content, user);
 	}
 }

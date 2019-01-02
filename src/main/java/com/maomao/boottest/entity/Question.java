@@ -22,7 +22,7 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "QUE_SEQ", allocationSize = 25)
+	@SequenceGenerator(name = "QUE_SEQ", allocationSize = 25) //by default postgresql shares the same sequence
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QUE_SEQ")
 	@Column(unique = true, nullable = false)
 	private long questionId;

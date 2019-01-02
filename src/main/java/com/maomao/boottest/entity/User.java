@@ -21,7 +21,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "USE_SEQ", allocationSize = 25) //seems to share the same sequence
+	@SequenceGenerator(name = "USE_SEQ", sequenceName = "USER_ID_SEQ", allocationSize = 25)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USE_SEQ")
 	@Column(unique = true, nullable = false)
 	private long userId;

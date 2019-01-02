@@ -18,13 +18,19 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 
 	@Override
-	public UserDTO createUser(final String id, final String name, final LocalDate birthday) {
+	public User createRepoUser(final String id, final String name, final LocalDate birthday) {
 		final User user = new User();
 		user.setIdentifier(id);
 		user.setName(name);
 		user.setBirthday(birthday);
 		user.setCreationTimestamp(new Date());
 		final User saved = userRepo.save(user);
+		return saved;
+	}
+
+	@Override
+	public UserDTO createUser(final String id, final String name, final LocalDate birthday) {
+		final User saved = createRepoUser(id, name, birthday);
 		return toDTO(saved);
 	}
 

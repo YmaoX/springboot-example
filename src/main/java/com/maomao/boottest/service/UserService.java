@@ -7,7 +7,9 @@ import com.maomao.boottest.entity.User;
 
 public interface UserService {
 
-	UserDTO createUser(String Identifier, String name, LocalDate birthday);
+	User createRepoUser(String id, String name, LocalDate birthday);
+
+	UserDTO createUser(String id, String name, LocalDate birthday);
 
 	UserDTO getUserById(String name);
 
