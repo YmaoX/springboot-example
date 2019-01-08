@@ -2,6 +2,8 @@ package com.maomao.boottest.controller;
 
 import java.time.LocalDate;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -46,7 +48,7 @@ public class UserController {
 
 	@RequestMapping(value = "/answer-with-user", method = RequestMethod.POST)
 	public AnswerDTO postAnswerForNewUser(@RequestParam final String questionTitle, @RequestParam final String content,
-			@RequestBody final UserDTO user) {
+			@Valid @RequestBody final UserDTO user) {
 		return answerService.createAnswerWithUser(questionTitle, content, user);
 	}
 }

@@ -3,11 +3,14 @@ package com.maomao.boottest.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
+	@NotNull
 	private String identifier;
 
 	private String name;
